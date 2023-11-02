@@ -11,7 +11,7 @@ import com.reparacionjava.cortes.entity.Producto;
 
 /** Se toma la id de la entidad y su tipo que en este caso es Integer */
 @Repository
-public interface IProductoRepository extends PagingAndSortingRepository<Producto, Long> {
+public interface IProductoRepository extends PagingAndSortingRepository<Producto, Integer> {
 
 	@Query("SELECT p FROM Producto p WHERE p.nombre like %?1%")
 	public List<Producto> findByNombre(String term);

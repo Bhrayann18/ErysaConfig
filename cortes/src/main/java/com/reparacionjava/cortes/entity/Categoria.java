@@ -20,7 +20,7 @@ public class Categoria implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	@Column(length = 45, nullable = false, unique = true)
 	private String nombre;
@@ -34,11 +34,11 @@ public class Categoria implements Serializable {
 	public Categoria() {
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -50,12 +50,12 @@ public class Categoria implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public Categoria(Long id, String nombre) {
+	public Categoria(Integer id, String nombre) {
 		this.id = id;
 		this.nombre = nombre;
 	}
 
-	public Categoria(Long id) {
+	public Categoria(Integer id) {
 		this.id = id;
 	}
 

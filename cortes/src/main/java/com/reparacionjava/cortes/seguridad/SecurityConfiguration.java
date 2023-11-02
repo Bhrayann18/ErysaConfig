@@ -40,22 +40,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/", "/css/**", "/js/**", "/images/**", "/listar").permitAll()
-				// .antMatchers("/ver/**").hasAnyRole("USER")
-				// .antMatchers("/uploads/**").hasAnyRole("USER")
-				// .antMatchers("/form/**").hasAnyRole("ADMIN")
-				// .antMatchers("/eliminar/**").hasAnyRole("ADMIN")
-				// .antMatchers("/factura/**").hasAnyRole("ADMIN")
-				.anyRequest().authenticated()
-				.and()
-				.formLogin()
-				.successHandler(successHandler)
-				.loginPage("/login")
+				.antMatchers("/", "/registro", "/css/**", "/js/**", "/images/**","cliente",
+						"/uploads/{filename:.+}", "/ver/{id}", "/formFactura", "/formFactura/{id}", "/usuarios",
+						"/ordenes", "/detalle/{id}", "productohome/{id}", "/cart", "/delete/cart/{id}", "/getCart",
+						"/order", "/saveOrder", "/search")
 				.permitAll()
-				.and()
-				.logout().permitAll()
-				.and()
-				.exceptionHandling().accessDeniedPage("/error_403");
+
+				.antMatchers("/listar/").hasAuthority("ROLE_ADMIN")
+
+				.anyRequest().authenticated().and().formLogin().successHandler(successHandler).loginPage("/login")
+				.permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/error_403");
 	}
 
 }

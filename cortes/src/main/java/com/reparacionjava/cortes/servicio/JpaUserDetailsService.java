@@ -1,7 +1,9 @@
 package com.reparacionjava.cortes.servicio;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +17,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.reparacionjava.cortes.dao.IUsuarioDao;
+import com.reparacionjava.cortes.dao.IClienteDao;
+import com.reparacionjava.cortes.entity.Cliente;
 import com.reparacionjava.cortes.entity.Role;
-import com.reparacionjava.cortes.entity.Usuario;
+import com.reparacionjava.cortes.repositorio.ClienteRepository;
 
 @Service("jpaUserDetailsService")
 public class JpaUserDetailsService implements UserDetailsService {
@@ -25,33 +28,22 @@ public class JpaUserDetailsService implements UserDetailsService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private IUsuarioDao usuarioDao;
+	private ClienteRepository clienteRepository;
 
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		Usuario usuario = usuarioDao.findByUsername(username);
+		Cliente cliente = clienteRepository.findByUsername(username);
 
-		if (usuario == null) {
-			logger.error(String.format("Error login: %s no existe en la base de datos", username));
-			throw new UsernameNotFoundException(String.format("Usuario: %s no existe en la base de datos", username));
+		if (cliente == null) {
+			throw new UsernameNotFoundException("Usuario o password inválidos");
 		}
+		return new User(cliente.getUsername(), cliente.getPassword(), mapearAutoridadesRoles(cliente.getRoles()));
+	}
 
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-
-		for (Role role : usuario.getRoles()) {
-			logger.info(String.format("Usuario: %s, tiene ROL: %s", username, role));
-			authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
-		}
-
-		if (authorities.isEmpty()) {
-			logger.error(String.format("Usuario: %s no tiene roles asignados", username));
-			throw new UsernameNotFoundException(String.format("Usuario: %s no tiene roles asignados", username));
-		}
-
-		return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true,
-				authorities);
+	private Collection<? extends GrantedAuthority> mapearAutoridadesRoles(Collection<Role> roles) {
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
 	}
 
 }

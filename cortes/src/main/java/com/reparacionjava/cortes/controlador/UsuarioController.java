@@ -32,7 +32,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.reparacionjava.cortes.entity.Cliente;
 import com.reparacionjava.cortes.entity.Orden;
-import com.reparacionjava.cortes.entity.Usuario;
 import com.reparacionjava.cortes.servicio.IFacturaService;
 import com.reparacionjava.cortes.servicio.IOrdenService;
 
@@ -53,10 +52,10 @@ public class UsuarioController {
 	private IOrdenService ordenService;
 
 	@GetMapping("/compras")
-	public String obtenerCompras(Model model, HttpSession session) {
+	public String obtenerCompras(@PathVariable(name = "id", required = false)  Integer id, Model model, HttpSession session) {
 		model.addAttribute("sesion");
 
-		Cliente cliente = facturaService.findById(1).get();
+		Cliente cliente = facturaService.buscarPorId(1);
 		List<Orden> ordenes = ordenService.findByCliente(cliente);
 		logger.info("ordenes {}", ordenes);
 
@@ -72,7 +71,7 @@ public class UsuarioController {
 
 		model.addAttribute("detalles", orden.get().getDetalle());
 
-		model.addAttribute("sesion", session.getAttribute("idusuario"));
+		model.addAttribute("sesion", session.getAttribute("idcliente"));
 		return "usuario/detallecompra";
 	}
 

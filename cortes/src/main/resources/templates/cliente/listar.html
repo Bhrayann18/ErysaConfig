@@ -31,7 +31,7 @@
 							<td th:text="${cliente.nombre}"></td>
 							<td th:text="${cliente.apellido}"></td>
 							<td th:text="${cliente.email}"></td>
-							<td th:text="${cliente.createAt}"></td>
+							<!--<td th:text="${cliente.createAt}"></td>-->
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs"
 								th:href="@{'/factura/form/' + ${cliente.id}}" th:text="'Crear Factura'"></a></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"

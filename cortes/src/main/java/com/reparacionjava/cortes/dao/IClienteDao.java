@@ -5,9 +5,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.reparacionjava.cortes.entity.Cliente;
 
-public interface IClienteDao extends PagingAndSortingRepository<Cliente, Long> {
+public interface IClienteDao extends PagingAndSortingRepository<Cliente, Integer> {
 
 	@Query("select c from Cliente c left join fetch c.facturas f where c.id = ?1")
-	public Cliente fetchByIdWithFacturas(Long id);
+	public Cliente fetchByIdWithFacturas(Integer id);
 
 }

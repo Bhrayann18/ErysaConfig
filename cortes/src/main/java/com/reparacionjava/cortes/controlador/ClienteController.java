@@ -48,7 +48,6 @@ public class ClienteController {
 	@Autowired
 	private IUploadFileService uploadFileService;
 
-	@Secured("ROLE_USER")
 	@GetMapping(value = "/uploads/{filename:.+}")
 	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
 
@@ -65,9 +64,8 @@ public class ClienteController {
 				.body(recurso);
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping({ "/ver/{id}" })
-	public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
+	public String ver(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes flash) {
 
 		Cliente cliente = facturaService.fetchByIdWithFacturas(id);
 
@@ -83,37 +81,9 @@ public class ClienteController {
 
 	}
 
-	@GetMapping({ "/listar", "" })
+	@GetMapping({ "/listar" })
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
-			Authentication authentication, HttpServletRequest request) {
-
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		if (this.hasRole("ROLE_ADMIN")) {
-			logger.info("Hola ".concat(auth.getName()).concat(" tienes acceso"));
-		} else {
-			logger.info("Hola ".concat(auth.getName()).concat(" no tienes acceso"));
-		}
-
-		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request,
-				"ROLE_");
-
-		if (securityContext.isUserInRole("ADMIN")) {
-			logger.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName())
-					.concat(" tienes acceso"));
-		} else {
-			logger.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName())
-					.concat(" no tienes acceso"));
-		}
-
-		if (request.isUserInRole("ROLE_ADMIN")) {
-			logger.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName())
-					.concat(" tienes acceso"));
-		} else {
-			logger.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName())
-					.concat(" no tienes acceso"));
-		}
-
+			HttpServletRequest request) {
 		Pageable pageRequest = PageRequest.of(page, 5);
 		Page<Cliente> clientes = facturaService.findAll(pageRequest);
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
@@ -125,7 +95,6 @@ public class ClienteController {
 		return "cliente/listar";
 	}
 
-	@Secured("ROLE_ADMIN")
 	@GetMapping({ "/formFactura" })
 	public String crear(Map<String, Object> map) {
 		Cliente cliente = new Cliente();
@@ -137,55 +106,41 @@ public class ClienteController {
 	/*
 	 * @Secured("ROLE_ADMIN")
 	 * 
-	 * @PostMapping({ "/form" })
-	 * public String crear(@Valid Cliente cliente, BindingResult result, Model
-	 * model,
+	 * @PostMapping({ "/form" }) public String crear(@Valid Cliente cliente,
+	 * BindingResult result, Model model,
 	 * 
 	 * @RequestParam("file") MultipartFile foto, RedirectAttributes flash,
 	 * SessionStatus status) {
 	 * 
 	 * String uniqueFilename = null;
 	 * 
-	 * if (result.hasErrors()) {
-	 * model.addAttribute("titulo", "Formulario de Cliente");
-	 * return "cliente/form";
-	 * }
+	 * if (result.hasErrors()) { model.addAttribute("titulo",
+	 * "Formulario de Cliente"); return "cliente/form"; }
 	 * 
 	 * if (!foto.isEmpty()) {
 	 * 
 	 * if (cliente.getId() != null && cliente.getId() > 0 && cliente.getFoto() !=
-	 * null
-	 * && cliente.getFoto().length() > 0) {
+	 * null && cliente.getFoto().length() > 0) {
 	 * 
 	 * uploadFileService.delete(cliente.getFoto());
 	 * 
 	 * }
 	 * 
-	 * try {
-	 * uniqueFilename = uploadFileService.copy(foto);
-	 * } catch (IOException e) {
-	 * // TODO Auto-generated catch block
-	 * e.printStackTrace();
-	 * }
+	 * try { uniqueFilename = uploadFileService.copy(foto); } catch (IOException e)
+	 * { // TODO Auto-generated catch block e.printStackTrace(); }
 	 * 
 	 * flash.addFlashAttribute("info", "Ha subido correctamente '" + uniqueFilename
-	 * + "'");
-	 * cliente.setFoto(uniqueFilename);
-	 * }
+	 * + "'"); cliente.setFoto(uniqueFilename); }
 	 * 
 	 * String messageFlash = (cliente.getId() != null) ? "Cliente editado con exito"
-	 * : "Cliente creado con exito";
-	 * facturaService.save(cliente);
+	 * : "Cliente creado con exito"; facturaService.save(cliente);
 	 * 
-	 * status.setComplete();
-	 * flash.addFlashAttribute("success", messageFlash);
-	 * return "redirect:/listar";
-	 * }
+	 * status.setComplete(); flash.addFlashAttribute("success", messageFlash);
+	 * return "redirect:/listar"; }
 	 */
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping({ "/formFactura/{id}" })
-	public String modificar(@PathVariable(value = "id") Long id, Map<String, Object> map, RedirectAttributes flash) {
+	public String modificar(@PathVariable(value = "id") Integer id, Map<String, Object> map, RedirectAttributes flash) {
 
 		Cliente cliente = null;
 		if (id > 0) {
@@ -208,21 +163,16 @@ public class ClienteController {
 	/*
 	 * @Secured({ "ROLE_ADMIN" })
 	 * 
-	 * @GetMapping({ "/eliminarFactura/{id}" })
-	 * public String eliminar(@PathVariable(value = "id") Integer id,
-	 * RedirectAttributes flash) {
+	 * @GetMapping({ "/eliminarFactura/{id}" }) public String
+	 * eliminar(@PathVariable(value = "id") Integer id, RedirectAttributes flash) {
 	 * 
-	 * if (id > 0) {
-	 * Cliente cliente = facturaService.findById(id).get();
-	 * facturaService.delete(id);
-	 * if (uploadFileService.delete(cliente.getFoto())) {
-	 * flash.addFlashAttribute("success", "Cliente eliminado con exito");
-	 * }
+	 * if (id > 0) { Cliente cliente = facturaService.findById(id).get();
+	 * facturaService.delete(id); if (uploadFileService.delete(cliente.getFoto())) {
+	 * flash.addFlashAttribute("success", "Cliente eliminado con exito"); }
 	 * 
 	 * }
 	 * 
-	 * return "redirect:/listar";
-	 * }
+	 * return "redirect:/listar"; }
 	 */
 
 	private boolean hasRole(String role) {

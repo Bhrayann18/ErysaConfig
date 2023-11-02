@@ -16,14 +16,14 @@ public interface ProductoService {
 
 	public List<Producto> findAll();
 
-	public Optional<Producto> get(Long id);
+	public Optional<Producto> get(Integer id);
 
 	public Page<Producto> findAll(Pageable pageable);
 
 	public void save(Producto producto);
 
-	public Producto findOne(Long id);
+	public Producto findOne(Integer id);
 
-	public void delete(Long id);
+	public void delete(Integer id);
 
 }

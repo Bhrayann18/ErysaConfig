@@ -1,4 +1,4 @@
-package com.reparacionjava.cortes.entity;
+/*package com.reparacionjava.cortes.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -70,4 +70,4 @@ public class Usuario implements Serializable {
         return null;
     }
 
-}
+}*/

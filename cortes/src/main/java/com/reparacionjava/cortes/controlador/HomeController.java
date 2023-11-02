@@ -24,7 +24,6 @@ import com.reparacionjava.cortes.entity.Cliente;
 import com.reparacionjava.cortes.entity.DetalleOrden;
 import com.reparacionjava.cortes.entity.Orden;
 import com.reparacionjava.cortes.entity.Producto;
-import com.reparacionjava.cortes.entity.Usuario;
 import com.reparacionjava.cortes.servicio.IDetalleOrdenService;
 import com.reparacionjava.cortes.servicio.IFacturaService;
 import com.reparacionjava.cortes.servicio.IOrdenService;
@@ -60,18 +59,18 @@ public class HomeController {
 	@GetMapping("")
 	public String home(Model model, HttpSession session) {
 
-		log.info("Sesion del usuario: {}", session.getAttribute("idusuario"));
+		log.info("Sesion del usuario: {}", session.getAttribute("idcliente"));
 
 		model.addAttribute("productos", productoService.findAll());
 
 		// session
-		model.addAttribute("sesion", session.getAttribute("idusuario"));
+		model.addAttribute("sesion", session.getAttribute("idcliente"));
 
 		return "usuario/home";
 	}
 
 	@GetMapping("productohome/{id}")
-	public String productoHome(@PathVariable Long id, Model model) {
+	public String productoHome(@PathVariable Integer id, Model model) {
 		log.info("Id producto enviado como parámetro {}", id);
 		Producto producto = new Producto();
 		Optional<Producto> productoOptional = productoService.get(id);
@@ -83,7 +82,7 @@ public class HomeController {
 	}
 
 	@PostMapping("/cart")
-	public String addCart(@RequestParam Long id, @RequestParam Long cantidad, Model model) {
+	public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
 		DetalleOrden detalleOrden = new DetalleOrden();
 		Producto producto = new Producto();
 		double sumaTotal = 0;
@@ -100,7 +99,7 @@ public class HomeController {
 		detalleOrden.setProducto(producto);
 
 		// validar que le producto no se añada 2 veces
-		Long idProducto = producto.getId();
+		Integer idProducto = producto.getId();
 		boolean ingresado = detalles.stream().anyMatch(p -> p.getProducto().getId() == idProducto);
 
 		if (!ingresado) {
@@ -118,7 +117,7 @@ public class HomeController {
 
 	// quitar un producto del carrito
 	@GetMapping("/delete/cart/{id}")
-	public String deleteProductoCart(@PathVariable Long id, Model model) {
+	public String deleteProductoCart(@PathVariable Integer id, Model model) {
 
 		// lista nueva de prodcutos
 		List<DetalleOrden> ordenesNueva = new ArrayList<DetalleOrden>();
@@ -149,31 +148,31 @@ public class HomeController {
 		model.addAttribute("orden", orden);
 
 		// sesion
-		model.addAttribute("sesion", session.getAttribute("idusuario"));
+		model.addAttribute("sesion", session.getAttribute("idcliente"));
 		return "/usuario/carrito";
 	}
 
 	@GetMapping("/order")
-	public String order(Model model, HttpSession session) {
+	public String order(@PathVariable(name = "id", required = false) Integer id, Model model, HttpSession session) {
 
-		Cliente cliente = facturaService.findById(1).get();
+		Cliente cliente = facturaService.buscarPorId(1);
 
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
-		model.addAttribute("usuario", cliente);
+		model.addAttribute("cliente", cliente);
 
 		return "usuario/resumenorden";
 	}
 
 	// guardar la orden
 	@GetMapping("/saveOrder")
-	public String saveOrder(HttpSession session) {
+	public String saveOrder(@PathVariable(name = "id", required = false) Integer id, Model model, HttpSession session) {
 		Date fechaCreacion = new Date();
 		orden.setFechaCreacion(fechaCreacion);
 		orden.setNumero(ordenService.generarNumeroOrden());
 
 		// usuario
-		Cliente cliente = facturaService.findById(1).get();
+		Cliente cliente = facturaService.buscarPorId(1);
 
 		orden.setCliente(cliente);
 		ordenService.save(orden);

@@ -51,7 +51,7 @@ public class ProductoController {
 	private CategoriaRepositorio categoriaRepositorio;
 
 	@GetMapping("/verDetallesProducto/{id}")
-	public String verDetallesDelProducto(@PathVariable(value = "id") Long id, Map<String, Object> modelo,
+	public String verDetallesDelProducto(@PathVariable(value = "id") Integer id, Map<String, Object> modelo,
 			RedirectAttributes flash) {
 		Producto producto = productoServicio.findOne(id);
 		if (producto == null) {
@@ -66,7 +66,7 @@ public class ProductoController {
 	/**
 	 * Se listan los productos y sus respectivos metodos
 	 */
-	@GetMapping({ "/listarProductos", "" })
+	@GetMapping({ "/listarProductos" })
 	public String listarProductos(@RequestParam(name = "page", defaultValue = "0") int page, Model modelo) {
 		Pageable pageRequest = PageRequest.of(page, 4);
 		Page<Producto> productos = productoServicio.findAll(pageRequest);
@@ -133,7 +133,7 @@ public class ProductoController {
 	}
 
 	@GetMapping("/form/{id}")
-	public String editarProducto(@PathVariable(value = "id") Long id, Map<String, Object> modelo,
+	public String editarProducto(@PathVariable(value = "id") Integer id, Map<String, Object> modelo,
 			RedirectAttributes flash) {
 		List<Categoria> listarCategorias = categoriaRepositorio.findAll();
 		Producto producto = null;
@@ -157,7 +157,7 @@ public class ProductoController {
 	 * Se elimina un registro
 	 */
 	@GetMapping("/eliminar/{id}")
-	public String eliminarProducto(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
+	public String eliminarProducto(@PathVariable(value = "id") Integer id, RedirectAttributes flash) {
 		if (id > 0) {
 			productoServicio.delete(id);
 			flash.addFlashAttribute("success", "Producto eliminado con exito");

@@ -32,6 +32,6 @@ public class LoginController {
 		}
 
 		model.addAttribute("titulo", "Iniciar Sesión");
-		return "login";
+		return "/login";
 	}
 }

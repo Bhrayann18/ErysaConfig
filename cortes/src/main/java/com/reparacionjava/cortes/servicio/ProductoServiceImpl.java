@@ -29,7 +29,7 @@ public class ProductoServiceImpl implements ProductoService {
 	}
 
 	@Override
-	public Optional<Producto> get(Long id) {
+	public Optional<Producto> get(Integer id) {
 		return productoRepositorio.findById(id);
 	}
 
@@ -47,13 +47,13 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	@Transactional
-	public void delete(Long id) {
+	public void delete(Integer id) {
 		productoRepositorio.deleteById(id);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Producto findOne(Long id) {
+	public Producto findOne(Integer id) {
 		return productoRepositorio.findById(id).orElse(null);
 	}
 

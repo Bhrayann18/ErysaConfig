@@ -42,7 +42,7 @@ public class FacturaController {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@GetMapping({ "/ver/{id}" })
-	public String ver(@PathVariable Long id, Model model, RedirectAttributes flash) {
+	public String ver(@PathVariable Integer id, Model model, RedirectAttributes flash) {
 
 		Factura factura = facturaService.fetchByIdWithItemFacturaWithProducto(id); // facturaService.findFacturaById(id);
 
@@ -58,7 +58,7 @@ public class FacturaController {
 	}
 
 	@GetMapping({ "/form/{clienteId}" })
-	public String crear(@PathVariable Long clienteId, Model model, RedirectAttributes flash) {
+	public String crear(@PathVariable Integer clienteId, Model model, RedirectAttributes flash) {
 
 		Cliente cliente = facturaService.buscarPorId(clienteId);
 
@@ -89,7 +89,7 @@ public class FacturaController {
 
 	@PostMapping("/form")
 	public String guardar(@Valid Factura factura, BindingResult result, Model model,
-			@RequestParam(name = "item_id[]", required = false) Long[] itemId,
+			@RequestParam(name = "item_id[]", required = false) Integer[] itemId,
 			@RequestParam(name = "cantidad[]", required = false) Long[] cantidad, RedirectAttributes flash,
 			SessionStatus status) {
 
@@ -125,7 +125,7 @@ public class FacturaController {
 	}
 
 	@GetMapping("eliminar/{id}")
-	public String eliminar(@PathVariable Long id, RedirectAttributes flash) {
+	public String eliminar(@PathVariable Integer id, RedirectAttributes flash) {
 
 		Factura factura = facturaService.findFacturaById(id);
 
