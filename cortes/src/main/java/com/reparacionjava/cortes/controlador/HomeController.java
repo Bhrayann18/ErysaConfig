@@ -30,7 +30,6 @@ import com.reparacionjava.cortes.servicio.IOrdenService;
 import com.reparacionjava.cortes.servicio.ProductoService;
 
 @Controller
-@RequestMapping("/")
 public class HomeController {
 
 	private final Logger log = LoggerFactory.getLogger(HomeController.class);
@@ -69,7 +68,7 @@ public class HomeController {
 		return "usuario/home";
 	}
 
-	@GetMapping("productohome/{id}")
+	@GetMapping("/productohome/{id}")
 	public String productoHome(@PathVariable Integer id, Model model) {
 		log.info("Id producto enviado como parámetro {}", id);
 		Producto producto = new Producto();

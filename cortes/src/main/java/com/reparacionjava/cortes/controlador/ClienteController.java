@@ -45,25 +45,6 @@ public class ClienteController {
 	@Autowired
 	private IFacturaService facturaService;
 
-	@Autowired
-	private IUploadFileService uploadFileService;
-
-	@GetMapping(value = "/uploads/{filename:.+}")
-	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
-
-		Resource recurso = null;
-		try {
-			recurso = uploadFileService.load(filename);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
-				.body(recurso);
-	}
-
 	@GetMapping({ "/ver/{id}" })
 	public String ver(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes flash) {
 

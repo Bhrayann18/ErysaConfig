@@ -19,7 +19,7 @@ public class LoginController {
 		// Si principal es distinto de null ya alguien ha iniciado sesion
 		if (principal != null) {
 			flash.addFlashAttribute("info", "Ya ha iniciado sesión anteriormente");
-			return "redirect:/listar";
+			return "redirect:/login";
 		}
 
 		if (error != null) {

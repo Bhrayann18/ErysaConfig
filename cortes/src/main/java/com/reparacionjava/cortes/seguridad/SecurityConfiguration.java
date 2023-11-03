@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.reparacionjava.cortes.auth.handler.LoginSuccessHandler;
 import com.reparacionjava.cortes.servicio.JpaUserDetailsService;
@@ -39,17 +40,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/", "/registro", "/css/**", "/js/**", "/images/**","cliente",
-						"/uploads/{filename:.+}", "/ver/{id}", "/formFactura", "/formFactura/{id}", "/usuarios",
-						"/ordenes", "/detalle/{id}", "productohome/{id}", "/cart", "/delete/cart/{id}", "/getCart",
-						"/order", "/saveOrder", "/search")
+		http.authorizeRequests().antMatchers(
+
+				"/js/**",
+				"/css/**",
+				"/css/styles.css**",
+				"/img/**",
+				"/registro**","productohome/{id}**").permitAll()
+				.antMatchers("/factura/form/**","/factura/ver/**","/administrador/**","/cliente/ver/**","/cliente/formFactura/**",/* "/listar/**",*/"/listarProductos/**","/productos/form/**","/productos/verDetallesProducto/{id}**")
+				.hasAuthority("ROLE_ADMIN")
+				.anyRequest().authenticated()
+				.and()
+				.formLogin()
+				.loginPage("/login")
 				.permitAll()
+				.and()
+				.logout()
+				.invalidateHttpSession(true)
+				.clearAuthentication(true)
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/login?logout")
+				.permitAll();
 
-				.antMatchers("/listar/").hasAuthority("ROLE_ADMIN")
-
-				.anyRequest().authenticated().and().formLogin().successHandler(successHandler).loginPage("/login")
-				.permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/error_403");
 	}
 
 }

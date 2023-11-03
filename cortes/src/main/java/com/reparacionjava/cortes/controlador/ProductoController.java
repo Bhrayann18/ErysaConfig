@@ -56,7 +56,7 @@ public class ProductoController {
 		Producto producto = productoServicio.findOne(id);
 		if (producto == null) {
 			flash.addFlashAttribute("error", "El Producto no existe en la base de datos");
-			return "redirect:/listar";
+			return "redirect:/listarProductos";
 		}
 		modelo.put("producto", producto);
 		modelo.put("titulo", "Detalles del producto " + producto.getNombre());
@@ -70,7 +70,7 @@ public class ProductoController {
 	public String listarProductos(@RequestParam(name = "page", defaultValue = "0") int page, Model modelo) {
 		Pageable pageRequest = PageRequest.of(page, 4);
 		Page<Producto> productos = productoServicio.findAll(pageRequest);
-		PageRender<Producto> pageRender = new PageRender<>("/listar", productos);
+		PageRender<Producto> pageRender = new PageRender<>("/ll", productos);
 
 		modelo.addAttribute("titulo", "Listado de productos");
 		modelo.addAttribute("productos", productos);
@@ -141,11 +141,11 @@ public class ProductoController {
 			producto = productoServicio.findOne(id);
 			if (producto == null) {
 				flash.addFlashAttribute("error", "El ID del producto no existe en la base de datos");
-				return "redirect:/listar";
+				return "redirect:/listarProductos";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID del producto no puede ser cero");
-			return "redirect:/listar";
+			return "redirect:/listarProductos";
 		}
 		modelo.put("listarCategorias", listarCategorias);
 		modelo.put("producto", producto);
@@ -162,7 +162,7 @@ public class ProductoController {
 			productoServicio.delete(id);
 			flash.addFlashAttribute("success", "Producto eliminado con exito");
 		}
-		return "redirect:/listar";
+		return "redirect:/listarProductos";
 	}
 
 	/**
