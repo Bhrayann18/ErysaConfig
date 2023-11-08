@@ -53,10 +53,10 @@ public class Factura implements Serializable {
 	@JoinColumn(name = "factura_id")
 	private List<ItemFactura> items;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "categoria_id")
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	private Categoria categoria;
+	private Categoria categoria;*/
 
 	@PrePersist
 	public void prePersist() {
@@ -131,11 +131,11 @@ public class Factura implements Serializable {
 		return total;
 	}
 
-	public Categoria getCategoria() {
+	/*public Categoria getCategoria() {
 		return categoria;
 	}
 
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
-	}
+	}*/
 }

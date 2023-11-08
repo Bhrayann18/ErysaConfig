@@ -23,6 +23,8 @@ public class Orden {
 
 	private double total;
 
+	private String envio;
+
 	@ManyToOne
 	private Cliente cliente;
 
@@ -33,13 +35,13 @@ public class Orden {
 
 	}
 
-	public Orden(Integer id, String numero, Date fechaCreacion, Date fechaRecibida, double total) {
-		super();
+	public Orden(Integer id, String numero, Date fechaCreacion, Date fechaRecibida, double total, String envio) {
 		this.id = id;
 		this.numero = numero;
 		this.fechaCreacion = fechaCreacion;
 		this.fechaRecibida = fechaRecibida;
 		this.total = total;
+		this.envio = envio;
 	}
 
 	public Integer getId() {
@@ -98,10 +100,18 @@ public class Orden {
 		this.detalle = detalle;
 	}
 
+	public String getEnvio() {
+		return envio;
+	}
+
+	public void setEnvio(String envio) {
+		this.envio = envio;
+	}
+
 	@Override
 	public String toString() {
 		return "Orden [id=" + id + ", numero=" + numero + ", fechaCreacion=" + fechaCreacion + ", fechaRecibida="
-				+ fechaRecibida + ", total=" + total + "]";
+				+ fechaRecibida + ", total=" + total + ", envio=" + envio + "]";
 	}
 
 }

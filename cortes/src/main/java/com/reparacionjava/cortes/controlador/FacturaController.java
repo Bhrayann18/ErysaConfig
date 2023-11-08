@@ -62,7 +62,7 @@ public class FacturaController {
 
 		Cliente cliente = facturaService.buscarPorId(clienteId);
 
-		List<Categoria> listarCategorias = categoriaDao.findAll();
+		//List<Categoria> listarCategorias = categoriaDao.findAll();
 
 		if (cliente == null) {
 			flash.addFlashAttribute("danger", "El cliente no existe en la base de datos");
@@ -72,7 +72,7 @@ public class FacturaController {
 		Factura factura = new Factura();
 		factura.setCliente(cliente);
 
-		model.addAttribute("listarCategorias", listarCategorias);
+		//model.addAttribute("listarCategorias", listarCategorias);
 		model.addAttribute("factura", factura);
 		model.addAttribute("titulo", "Crear Factura");
 		return "factura/form";

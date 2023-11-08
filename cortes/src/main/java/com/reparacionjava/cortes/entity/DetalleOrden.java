@@ -15,6 +15,7 @@ public class DetalleOrden {
 	private Integer id;
 	private String nombre;
 	private double cantidad;
+	private String envio;
 	private double precio;
 	private double total;
 
@@ -28,11 +29,12 @@ public class DetalleOrden {
 
 	}
 
-	public DetalleOrden(Integer id, String nombre, double cantidad, double precio, double total) {
+	public DetalleOrden(Integer id, String nombre, double cantidad, String envio, double precio, double total) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.cantidad = cantidad;
+		this.envio = envio;
 		this.precio = precio;
 		this.total = total;
 	}
@@ -93,11 +95,18 @@ public class DetalleOrden {
 		this.producto = producto;
 	}
 
-	@Override
-	public String toString() {
-		return "DetalleOrden [id=" + id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", precio=" + precio
-				+ ", total=" + total + "]";
+	public String getEnvio() {
+		return envio;
 	}
 
+	public void setEnvio(String envio) {
+		this.envio = envio;
+	}
+
+	@Override
+	public String toString() {
+		return "DetalleOrden [id=" + id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", envio=" + envio
+				+ ", precio=" + precio + ", total=" + total + "]";
+	}
 
 }
